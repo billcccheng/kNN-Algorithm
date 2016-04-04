@@ -70,7 +70,7 @@ def calculate_distance(train_data, test_data):
     return distance
 
 def most_common(lst):
-    return max(set(lst), key=lst.count)
+    return max(lst, key=lst.count)
 
 if __name__ == "__main__":  
     file_name = sys.argv[1]
