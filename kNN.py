@@ -63,9 +63,11 @@ def normalize_data(data_file, target_data, structure_file):
         normalized_target_data.append(individual_target_data)
     return data_file, normalized_target_data
 
-def calculate_distance(train_data, test_data):
+def calculate_distance(train_data, test_data, combination):
     distance = 0
     for x in range(len(train_data)):
+        if x not in combination:
+            continue
         distance += pow((train_data[x] - test_data[x]), 2)
     return distance
 
@@ -82,6 +84,59 @@ if __name__ == "__main__":
 
     data_input = np.array(normalized_data)
     kf = KFold(len(data_input), n_folds=10)
+    feature_index = [x for x in range(len(data_input[0]))]
+    len_of_feature_index = len(feature_index[:])
+    #feature selection
+    counter = 0
+    combination_list = []
+    previous_error = 1
+    for train, test in kf:
+        while True:
+            all_errors = []
+            for fs_index in feature_index:
+                err_count = 0
+                for x in range(len(data_input[test])):
+                    closest_neighbor = {}
+                    for y in range(len(data_input[train])):
+                        combination_list.append(fs_index) 
+                        distance = calculate_distance(data_input[train][y], data_input[test][x], combination_list)
+                        del combination_list[-1]
+                        if len(closest_neighbor) < k_neighbor:
+                            closest_neighbor[y] = distance
+                        else:
+                            if distance < max(closest_neighbor.iteritems(), key=operator.itemgetter(1))[1]:
+                                del closest_neighbor[max(closest_neighbor.iteritems(), key=operator.itemgetter(1))[0]]
+                                closest_neighbor[y] = distance
+                    common_attr = []
+                    # print "Target: {0}".format(target_data[test[x]])
+                    for z in closest_neighbor.keys():
+                        # print target_data[z]
+                        common_attr.append(target_data[z])
+                    # print "Common: {0}".format(most_common(common))
+                    if(target_data[test[x]] != most_common(common_attr)):
+                        err_count += 1
+                all_errors.append(float(err_count)/len(test))
+            combination_list.append(feature_index[all_errors.index(min(all_errors))])
+            feature_index.remove(feature_index[all_errors.index(min(all_errors))])
+            # print feature_index
+            # print combination_list
+            # # print all_errors.index(min(all_errors))
+            # print previous_error, all_errors[all_errors.index(min(all_errors))]
+
+            if previous_error > all_errors[all_errors.index(min(all_errors))]:
+                previous_error = all_errors[all_errors.index(min(all_errors))]
+                best_combination_list = combination_list[:]
+                counter = 0
+            else:
+                counter+=1
+            # print "Counter {0}".format(counter)
+            if counter == len_of_feature_index/2 or len(feature_index) == 0:
+                break
+            # print "Best: {0}".format(best_combination_list)
+        break
+    # print all_errors
+    # print combination_list
+    # print feature_index
 
     all_errors = []
     for train, test in kf:
@@ -89,7 +144,7 @@ if __name__ == "__main__":
         for x in range(len(data_input[test])):
             closest_neighbor = {}
             for y in range(len(data_input[train])): 
-                distance = calculate_distance(data_input[train][y], data_input[test][x])
+                distance = calculate_distance(data_input[train][y], data_input[test][x], best_combination_list)
                 if len(closest_neighbor) < k_neighbor:
                     closest_neighbor[y] = distance
                 else:
