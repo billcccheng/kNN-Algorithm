@@ -87,7 +87,6 @@ if __name__ == "__main__":
     feature_index = [x for x in range(len(data_input[0]))]
     len_of_feature_index = len(feature_index[:])
     #feature selection
-    
     counter = 0
     combination_list = []
     previous_error = 1
@@ -163,7 +162,7 @@ if __name__ == "__main__":
         all_errors.append(float(err_count)/len(test))
 
                 
-    
+        
         # print 
         # print target_data[]
         # print data_input[train]
