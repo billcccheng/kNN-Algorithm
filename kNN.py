@@ -66,9 +66,9 @@ def normalize_data(data_file, target_data, structure_file):
 def calculate_distance(train_data, test_data, combination):
     distance = 0
     for x in range(len(train_data)):
-        if x not in combination:
-            continue
-        distance += pow((train_data[x] - test_data[x]), 2)
+        if x in combination:
+            distance += pow((train_data[x] - test_data[x]), 2)
+        # distance += pow((train_data[x] - test_data[x]), 2)
     return distance
 
 def most_common(lst):
@@ -87,6 +87,7 @@ if __name__ == "__main__":
     feature_index = [x for x in range(len(data_input[0]))]
     len_of_feature_index = len(feature_index[:])
     #feature selection
+    
     counter = 0
     combination_list = []
     previous_error = 1
@@ -130,7 +131,7 @@ if __name__ == "__main__":
             else:
                 counter+=1
             # print "Counter {0}".format(counter)
-            if counter == len_of_feature_index/2 or len(feature_index) == 0:
+            if counter == len_of_feature_index or len(feature_index) == 0:
                 break
             # print "Best: {0}".format(best_combination_list)
         break
@@ -162,7 +163,7 @@ if __name__ == "__main__":
         all_errors.append(float(err_count)/len(test))
 
                 
-        
+    
         # print 
         # print target_data[]
         # print data_input[train]
@@ -171,9 +172,9 @@ if __name__ == "__main__":
         # print data_input[test]
         # print data_input[test][0]
         # break
-    print all_errors
+    # print all_errors
     print np.mean(all_errors),
-
+    print confident_interval_calculation(all_errors)
 
 
 
