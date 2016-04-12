@@ -116,8 +116,9 @@ if __name__ == "__main__":
         # print data_input[test]
         # print data_input[test][0]
         # break
-    print all_errors
+    # print all_errors
     print np.mean(all_errors),
+    print confident_interval_calculation(all_errors)
 
 
 
