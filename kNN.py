@@ -130,7 +130,7 @@ if __name__ == "__main__":
             else:
                 counter+=1
             # print "Counter {0}".format(counter)
-            if counter == len_of_feature_index or len(feature_index) == 0:
+            if counter == len_of_feature_index/2 or len(feature_index) == 0:
                 break
             # print "Best: {0}".format(best_combination_list)
         break
