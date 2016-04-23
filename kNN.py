@@ -134,11 +134,11 @@ if __name__ == "__main__":
                 break
             # print "Best: {0}".format(best_combination_list)
         break
-    # print all_errors
+    # print all_accuracy
     # print combination_list
     # print feature_index
 
-    all_errors = []
+    all_accuracy = []
     for train, test in kf:
         err_count = 0
         for x in range(len(data_input[test])):
@@ -159,7 +159,7 @@ if __name__ == "__main__":
             # print "Common: {0}".format(most_common(common))
             if(target_data[test[x]] != most_common(common_attr)):
                 err_count += 1
-        all_errors.append(float(err_count)/len(test))
+        all_accuracy.append(1-float(err_count)/len(test))
 
                 
         
@@ -171,9 +171,9 @@ if __name__ == "__main__":
         # print data_input[test]
         # print data_input[test][0]
         # break
-    # print all_errors
-    print np.mean(all_errors),
-    print confident_interval_calculation(all_errors)
+    # print all_accuracy
+    print np.mean(all_accuracy),
+    print confident_interval_calculation(all_accuracy)
 
 
 
