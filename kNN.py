@@ -97,6 +97,7 @@ if __name__ == "__main__":
                         del closest_neighbor[max(closest_neighbor.iteritems(), key=operator.itemgetter(1))[0]]
                         closest_neighbor[y] = distance
             common_attr = []
+            
             # print "Target: {0}".format(target_data[test[x]])
             for z in closest_neighbor.keys():
                 # print target_data[z]
@@ -117,7 +118,8 @@ if __name__ == "__main__":
         # print data_input[test][0]
         # break
     # print all_accuracy
-    print np.mean(all_accuracy),
+    print np.mean(all_accuracy)
+    print np.std(all_accuracy)
     print confident_interval_calculation(all_accuracy)
 
 
